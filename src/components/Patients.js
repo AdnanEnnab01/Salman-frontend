@@ -10,12 +10,19 @@ const Patients = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
   const [showAddPatientModal, setShowAddPatientModal] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [activeActionTab, setActiveActionTab] = useState("payment"); // "payment" | "sessions"
 
   const [paymentFormData, setPaymentFormData] = useState({
     amount: "",
     notes: "",
+  });
+  const [treatmentFormData, setTreatmentFormData] = useState({
+    treatmentName: "",
+    totalSessions: "",
+    totalAmount: "",
+    sessions: [],
   });
   const [patientFormData, setPatientFormData] = useState({
     name: "",
@@ -87,13 +94,27 @@ const Patients = () => {
 
   const handleAddPayment = (patient) => {
     setSelectedPatient(patient);
-    setShowAddPaymentModal(true);
+    setShowActionModal(true);
+    setActiveActionTab("payment");
     setPaymentFormData({ amount: "", notes: "" });
   };
 
-  const handleCloseAddPayment = () => {
-    setShowAddPaymentModal(false);
+  const handleOpenActions = (patient) => {
+    setSelectedPatient(patient);
+    setShowActionModal(true);
+    setActiveActionTab("payment");
     setPaymentFormData({ amount: "", notes: "" });
+  };
+
+  const handleCloseActions = () => {
+    setShowActionModal(false);
+    setPaymentFormData({ amount: "", notes: "" });
+    setTreatmentFormData({
+      treatmentName: "",
+      totalSessions: "",
+      totalAmount: "",
+      sessions: [],
+    });
   };
 
   const handleSubmitPayment = async (e) => {
@@ -116,11 +137,63 @@ const Patients = () => {
 
       if (response.ok) {
         await fetchPatients(); // Refresh list
-        handleCloseAddPayment();
+        handleCloseActions();
       }
     } catch (error) {
       console.error("Error adding payment:", error);
     }
+  };
+
+  // Treatment sessions handlers (UI only for now)
+  const handleTreatmentFieldChange = (field, value) => {
+    setTreatmentFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleTotalSessionsBlur = () => {
+    const count = parseInt(treatmentFormData.totalSessions || "0", 10);
+    if (!count || count <= 0) {
+      setTreatmentFormData((prev) => ({ ...prev, sessions: [] }));
+      return;
+    }
+
+    const existing = treatmentFormData.sessions || [];
+    const newSessions = [];
+    for (let i = 0; i < count; i++) {
+      newSessions.push(
+        existing[i] || {
+          date: "",
+          time: "",
+        }
+      );
+    }
+    setTreatmentFormData((prev) => ({ ...prev, sessions: newSessions }));
+  };
+
+  const handleSessionChange = (index, field, value) => {
+    setTreatmentFormData((prev) => {
+      const updated = [...(prev.sessions || [])];
+      updated[index] = {
+        ...updated[index],
+        [field]: value,
+      };
+      return { ...prev, sessions: updated };
+    });
+  };
+
+  const handleSubmitTreatment = (e) => {
+    e.preventDefault();
+    // Placeholder: integrate with backend later
+    console.log("Treatment plan for patient:", selectedPatient?.id, {
+      treatmentName: treatmentFormData.treatmentName,
+      totalSessions: treatmentFormData.totalSessions,
+      totalAmount: treatmentFormData.totalAmount,
+      sessions: treatmentFormData.sessions,
+    });
+    alert("Treatment sessions saved (frontend only for now).");
+    handleCloseActions();
   };
 
   const handleAddPatient = () => {
@@ -342,20 +415,10 @@ const Patients = () => {
                           Details
                         </button>
                         <button
-                          className="add-payment-btn"
-                          onClick={() => handleAddPayment(patient)}
-                          disabled={!patient.hasRemainingPayment}
+                          className="primary-action-btn"
+                          onClick={() => handleOpenActions(patient)}
                         >
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                          </svg>
-                          Add Payment
+                          Action
                         </button>
                       </div>
                     </td>
@@ -460,60 +523,187 @@ const Patients = () => {
         </div>
       )}
 
-      {/* Add Payment Modal */}
-      {showAddPaymentModal && selectedPatient && (
-        <div className="modal-overlay" onClick={handleCloseAddPayment}>
+      {/* Action Modal (Payment + Treatment Sessions) */}
+      {showActionModal && selectedPatient && (
+        <div className="modal-overlay" onClick={handleCloseActions}>
           <div
             className="modal-content payment-modal"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="modal-header">
-              <h3>Add Payment - {selectedPatient.name}</h3>
-              <button className="close-btn" onClick={handleCloseAddPayment}>
+              <h3>Actions - {selectedPatient.name}</h3>
+              <button className="close-btn" onClick={handleCloseActions}>
                 ×
               </button>
             </div>
-            <form onSubmit={handleSubmitPayment} className="payment-form">
-              <div className="form-group">
-                <label>Amount (ILS)</label>
-                <input
-                  type="number"
-                  value={paymentFormData.amount}
-                  onChange={(e) =>
-                    setPaymentFormData({
-                      ...paymentFormData,
-                      amount: e.target.value,
-                    })
-                  }
-                  max={selectedPatient.remainingAmount}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Notes</label>
-                <textarea
-                  value={paymentFormData.notes}
-                  onChange={(e) =>
-                    setPaymentFormData({
-                      ...paymentFormData,
-                      notes: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="form-actions">
-                <button
-                  type="button"
-                  className="cancel-btn"
-                  onClick={handleCloseAddPayment}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="submit-payment-btn">
-                  Add Payment
-                </button>
-              </div>
-            </form>
+
+            <div className="action-tabs">
+              <button
+                type="button"
+                className={`action-tab ${
+                  activeActionTab === "payment" ? "active" : ""
+                }`}
+                onClick={() => setActiveActionTab("payment")}
+              >
+                Payment
+              </button>
+              <button
+                type="button"
+                className={`action-tab ${
+                  activeActionTab === "sessions" ? "active" : ""
+                }`}
+                onClick={() => setActiveActionTab("sessions")}
+              >
+                Treatment Sessions
+              </button>
+            </div>
+
+            {activeActionTab === "payment" && (
+              <form onSubmit={handleSubmitPayment} className="payment-form">
+                <div className="form-group">
+                  <label>Amount (ILS)</label>
+                  <input
+                    type="number"
+                    value={paymentFormData.amount}
+                    onChange={(e) =>
+                      setPaymentFormData({
+                        ...paymentFormData,
+                        amount: e.target.value,
+                      })
+                    }
+                    max={selectedPatient.remainingAmount}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Notes</label>
+                  <textarea
+                    value={paymentFormData.notes}
+                    onChange={(e) =>
+                      setPaymentFormData({
+                        ...paymentFormData,
+                        notes: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={handleCloseActions}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="submit-payment-btn">
+                    Add Payment
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {activeActionTab === "sessions" && (
+              <form onSubmit={handleSubmitTreatment} className="payment-form">
+                <div className="form-group">
+                  <label>Treatment Name</label>
+                  <input
+                    type="text"
+                    value={treatmentFormData.treatmentName}
+                    onChange={(e) =>
+                      handleTreatmentFieldChange(
+                        "treatmentName",
+                        e.target.value
+                      )
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Total Treatment Amount (ILS)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={treatmentFormData.totalAmount}
+                    onChange={(e) =>
+                      handleTreatmentFieldChange(
+                        "totalAmount",
+                        e.target.value
+                      )
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Number of Sessions</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={treatmentFormData.totalSessions}
+                    onChange={(e) =>
+                      handleTreatmentFieldChange(
+                        "totalSessions",
+                        e.target.value
+                      )
+                    }
+                    onBlur={handleTotalSessionsBlur}
+                    required
+                  />
+                </div>
+
+                {treatmentFormData.sessions?.length > 0 && (
+                  <div className="sessions-list">
+                    {treatmentFormData.sessions.map((session, index) => (
+                      <div key={index} className="session-row">
+                        <span className="session-label">
+                          Session {index + 1}
+                        </span>
+                        <div className="session-fields">
+                          <input
+                            type="date"
+                            value={session.date}
+                            onChange={(e) =>
+                              handleSessionChange(
+                                index,
+                                "date",
+                                e.target.value
+                              )
+                            }
+                            required
+                          />
+                          <input
+                            type="time"
+                            value={session.time}
+                            onChange={(e) =>
+                              handleSessionChange(
+                                index,
+                                "time",
+                                e.target.value
+                              )
+                            }
+                            required
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={handleCloseActions}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="submit-payment-btn">
+                    Save Sessions
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

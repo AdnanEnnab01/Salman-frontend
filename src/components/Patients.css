@@ -275,8 +275,7 @@
   flex-wrap: wrap;
 }
 
-.details-btn,
-.add-payment-btn {
+.details-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -287,9 +286,6 @@
   transition: all 0.2s ease;
   font-size: 13px;
   font-weight: 500;
-}
-
-.details-btn {
   background: linear-gradient(135deg, #4abaa0 0%, #3a9d87 100%);
   color: white;
 }
@@ -299,27 +295,84 @@
   box-shadow: 0 2px 8px rgba(58, 157, 135, 0.3);
 }
 
-.add-payment-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-}
-
-.add-payment-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-}
-
-.add-payment-btn:disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.details-btn svg,
-.add-payment-btn svg {
+.details-btn svg {
   width: 16px;
   height: 16px;
+}
+
+.primary-action-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.primary-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.4);
+}
+
+.action-tabs {
+  display: inline-flex;
+  background: #f3f4f6;
+  border-radius: 999px;
+  padding: 3px;
+  margin: 0 24px 14px;
+}
+
+.action-tab {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.action-tab.active {
+  background: #ffffff;
+  color: #065f46;
+  box-shadow: 0 3px 8px rgba(15, 118, 110, 0.15);
+}
+
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.session-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.session-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  min-width: 90px;
+}
+
+.session-fields {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.session-fields input {
+  flex: 1;
 }
 
 /* Modal Styles */
