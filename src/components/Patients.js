@@ -11,6 +11,7 @@ const Patients = () => {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showAddPatientModal, setShowAddPatientModal] = useState(false);
+  const [showEditPatientModal, setShowEditPatientModal] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
   const [activeActionTab, setActiveActionTab] = useState("payment"); // "payment" | "sessions"
 
@@ -18,10 +19,15 @@ const Patients = () => {
     amount: "",
     notes: "",
   });
+  const [editPatientData, setEditPatientData] = useState({
+    name: "",
+    phone: "",
+    totalAmount: "",
+    paidAmount: "",
+  });
   const [treatmentFormData, setTreatmentFormData] = useState({
     treatmentName: "",
     totalSessions: "",
-    totalAmount: "",
     sessions: [],
   });
   const [patientFormData, setPatientFormData] = useState({
@@ -112,7 +118,6 @@ const Patients = () => {
     setTreatmentFormData({
       treatmentName: "",
       totalSessions: "",
-      totalAmount: "",
       sessions: [],
     });
   };
@@ -203,6 +208,48 @@ const Patients = () => {
 
   const handleCloseAddPatient = () => {
     setShowAddPatientModal(false);
+  };
+
+  const handleEditPatient = (patient) => {
+    setSelectedPatient(patient);
+    setEditPatientData({
+      name: patient.name,
+      phone: patient.phone,
+      totalAmount: patient.totalAmount,
+      paidAmount: patient.paidAmount,
+    });
+    setShowEditPatientModal(true);
+  };
+
+  const handleCloseEditPatient = () => {
+    setShowEditPatientModal(false);
+    setEditPatientData({ name: "", phone: "", totalAmount: "", paidAmount: "" });
+  };
+
+  const handleSubmitEditPatient = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${API_URL}/patients/${selectedPatient.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: editPatientData.name,
+            phone: editPatientData.phone,
+            totalAmount: parseFloat(editPatientData.totalAmount),
+            paidAmount: parseFloat(editPatientData.paidAmount),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        await fetchPatients();
+        handleCloseEditPatient();
+      }
+    } catch (error) {
+      console.error("Error updating patient:", error);
+    }
   };
 
   const handleSubmitPatient = async (e) => {
@@ -415,6 +462,20 @@ const Patients = () => {
                           Details
                         </button>
                         <button
+                          className="edit-btn"
+                          onClick={() => handleEditPatient(patient)}
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                          </svg>
+                          Edit
+                        </button>
+                        <button
                           className="primary-action-btn"
                           onClick={() => handleOpenActions(patient)}
                         >
@@ -620,22 +681,6 @@ const Patients = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Total Treatment Amount (ILS)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={treatmentFormData.totalAmount}
-                    onChange={(e) =>
-                      handleTreatmentFieldChange(
-                        "totalAmount",
-                        e.target.value
-                      )
-                    }
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
                   <label>Number of Sessions</label>
                   <input
                     type="number"
@@ -704,6 +749,110 @@ const Patients = () => {
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Edit Patient Modal */}
+      {showEditPatientModal && selectedPatient && (
+        <div className="modal-overlay" onClick={handleCloseEditPatient}>
+          <div
+            className="modal-content patient-form-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h3>Edit Patient</h3>
+              <button className="close-btn" onClick={handleCloseEditPatient}>
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleSubmitEditPatient} className="patient-form">
+              <div className="form-group">
+                <label>Patient Name *</label>
+                <input
+                  type="text"
+                  value={editPatientData.name}
+                  onChange={(e) =>
+                    setEditPatientData({
+                      ...editPatientData,
+                      name: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone Number *</label>
+                <input
+                  type="tel"
+                  value={editPatientData.phone}
+                  onChange={(e) =>
+                    setEditPatientData({
+                      ...editPatientData,
+                      phone: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Total Amount (ILS) *</label>
+                <input
+                  type="number"
+                  value={editPatientData.totalAmount}
+                  onChange={(e) =>
+                    setEditPatientData({
+                      ...editPatientData,
+                      totalAmount: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Paid Amount (ILS) *</label>
+                <input
+                  type="number"
+                  value={editPatientData.paidAmount}
+                  onChange={(e) =>
+                    setEditPatientData({
+                      ...editPatientData,
+                      paidAmount: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Remaining Amount (ILS)</label>
+                <input
+                  type="number"
+                  value={
+                    editPatientData.totalAmount && editPatientData.paidAmount
+                      ? Math.max(
+                          0,
+                          parseFloat(editPatientData.totalAmount) -
+                            parseFloat(editPatientData.paidAmount)
+                        )
+                      : 0
+                  }
+                  disabled
+                  readOnly
+                />
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={handleCloseEditPatient}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="submit-btn">
+                  Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

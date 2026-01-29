@@ -300,6 +300,31 @@
   height: 16px;
 }
 
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.edit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(215, 119, 6, 0.3);
+}
+
+.edit-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .primary-action-btn {
   padding: 8px 16px;
   border-radius: 6px;
@@ -745,6 +770,13 @@
   background: white;
 }
 
+.patient-form input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
 .patient-form .form-actions {
   display: flex;
   gap: 12px;
@@ -833,12 +865,14 @@
   }
 
   .details-btn,
+  .edit-btn,
   .add-payment-btn {
     padding: 6px 12px;
     font-size: 12px;
   }
 
   .details-btn svg,
+  .edit-btn svg,
   .add-payment-btn svg {
     width: 14px;
     height: 14px;
