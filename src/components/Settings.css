@@ -350,20 +350,265 @@ input:checked + .slider:before {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 0;
+  }
+
   .settings-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .settings-header h2 {
+    font-size: 24px;
+  }
+
+  .primary-save-btn {
+    width: 100%;
+    padding: 11px 16px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .settings-card {
+    padding: 16px 18px;
+    border-radius: 12px;
+  }
+
+  .settings-card h3 {
+    font-size: 16px;
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+    gap: 5px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .field-header {
+    gap: 6px;
+  }
+
+  .edit-icon-button {
+    font-size: 11px;
+    gap: 3px;
   }
 
   .working-hour-row {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 12px;
   }
 
   .time-range {
     width: 100%;
     justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .time-field {
+    flex: 1;
+  }
+
+  .time-field input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 640px) {
+  .settings-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .settings-header h2 {
+    font-size: 22px;
+    margin-bottom: 0;
+  }
+
+  .primary-save-btn {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .working-hour-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .time-range {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .time-field {
+    flex: 1;
+    min-width: 100%;
+  }
+
+  .time-field input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .settings-header h2 {
+    font-size: 20px;
+  }
+
+  .settings-header p {
+    font-size: 12px;
+  }
+
+  .primary-save-btn {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .settings-grid {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .settings-card {
+    padding: 14px 14px;
+    border-radius: 10px;
+  }
+
+  .settings-card h3 {
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  .card-subtitle {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+    gap: 4px;
+  }
+
+  .form-group label {
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+
+  .field-header {
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .edit-icon-button {
+    font-size: 10px;
+    gap: 2px;
+    padding: 2px 4px;
+  }
+
+  .working-hour-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .working-hour-label {
+    font-size: 12px;
+  }
+
+  .time-range {
+    width: 100%;
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  .time-field {
+    flex: 1;
+    width: 100%;
+  }
+
+  .time-field label {
+    font-size: 10px;
+  }
+
+  .time-field input {
+    width: 100%;
+    padding: 7px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+
+  .modal-content {
+    width: 96%;
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: 10px;
+  }
+
+  .modal-header {
+    padding: 16px 12px;
+  }
+
+  .modal-header h3 {
+    font-size: 16px;
+  }
+
+  .close-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 24px;
   }
 }
 

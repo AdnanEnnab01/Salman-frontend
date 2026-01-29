@@ -825,20 +825,162 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .stats-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .stat-number {
+    font-size: 28px;
+  }
+
+  .patients-table th,
+  .patients-table td {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .action-buttons {
+    gap: 6px;
+  }
+
+  .details-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .patients-container {
+    width: 100%;
   }
 
   .patients-header {
     flex-direction: column;
-    align-items: stretch;
+    gap: 12px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .search-container {
+    flex: 1;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .add-patient-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 10px 16px;
+  }
+
+  .patients-header h2 {
+    font-size: 22px;
+  }
+
+  .stats-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .stat-info h3 {
+    font-size: 13px;
+  }
+
+  .stat-number {
+    font-size: 24px;
+  }
+
+  .stat-detail {
+    font-size: 11px;
+  }
+
+  .stat-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .patients-table {
+    min-width: 600px;
+  }
+
+  .patients-table th,
+  .patients-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .details-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .patients-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .patients-header h2 {
+    font-size: 20px;
+  }
+
+  .patients-subtitle {
+    font-size: 12px;
   }
 
   .header-actions {
     flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
+    width: 100%;
+    gap: 10px;
   }
 
   .search-container {
@@ -846,50 +988,242 @@
     max-width: 100%;
   }
 
-  .add-patient-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .patients-table {
+  .search-input {
+    padding: 10px 14px 10px 42px;
     font-size: 14px;
   }
 
-  .patients-table th,
-  .patients-table td {
-    padding: 12px 8px;
+  .search-icon {
+    width: 18px;
+    height: 18px;
+    left: 12px;
+  }
+
+  .add-patient-btn {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .add-patient-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .stats-section {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    gap: 12px;
+    padding: 12px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+  }
+
+  .stat-info {
+    width: 100%;
+  }
+
+  .stat-info h3 {
+    font-size: 12px;
+  }
+
+  .stat-number {
+    font-size: 26px;
+  }
+
+  .stat-detail {
+    font-size: 10px;
   }
 
   .table-container {
     overflow-x: auto;
+    border-radius: 8px;
   }
 
-  .details-btn,
-  .edit-btn,
-  .add-payment-btn {
-    padding: 6px 12px;
+  .patients-table {
+    min-width: 400px;
     font-size: 12px;
   }
 
-  .details-btn svg,
-  .edit-btn svg,
-  .add-payment-btn svg {
-    width: 14px;
-    height: 14px;
+  .patients-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .patients-table th {
+    padding: 8px 6px;
+    font-size: 10px;
+    text-transform: capitalize;
+  }
+
+  .patients-table td {
+    padding: 8px 6px;
+    font-size: 11px;
   }
 
   .action-buttons {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
-  .action-buttons button {
-    width: 100%;
-    justify-content: center;
+  .details-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+    white-space: nowrap;
+    border-radius: 4px;
+  }
+
+  .details-btn span {
+    display: none;
+  }
+
+  .details-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .status-badge {
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+
+  .paid-amount,
+  .remaining-amount {
+    font-size: 11px;
   }
 
   .modal-content {
-    width: 95%;
-    max-width: 95%;
+    width: 96%;
+    max-width: 100%;
+    max-height: 85vh;
+  }
+
+  .modal-header {
+    padding: 16px 12px;
+  }
+
+  .modal-header h3 {
+    font-size: 16px;
+  }
+
+  .patient-details {
+    padding: 16px 12px;
+  }
+
+  .detail-row {
+    padding: 12px 0;
+    gap: 8px;
+  }
+
+  .detail-label {
+    font-size: 12px;
+    min-width: 80px;
+  }
+
+  .detail-value {
+    font-size: 13px;
+  }
+
+  .payment-history-section {
+    padding: 16px 12px;
+  }
+
+  .payment-history-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .payment-history-item {
+    padding: 12px;
+    border-radius: 6px;
+  }
+
+  .payment-history-header {
+    margin-bottom: 6px;
+  }
+
+  .payment-amount {
+    font-size: 16px;
+  }
+
+  .payment-date {
+    font-size: 11px;
+  }
+
+  .modal-footer {
+    padding: 12px;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .close-modal-btn,
+  .add-payment-modal-btn {
+    padding: 9px 12px;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .payment-form {
+    padding: 16px 12px;
+  }
+
+  .amount-input {
+    padding: 10px 45px 10px 12px;
+    font-size: 16px;
+  }
+
+  .currency-symbol {
+    right: 12px;
+    font-size: 14px;
+  }
+
+  .notes-textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .submit-payment-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 12px;
+  }
+
+  .patient-form {
+    padding: 16px 12px;
+  }
+
+  .patient-form label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .patient-form input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .patient-form .form-actions {
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .patient-form .cancel-btn,
+  .patient-form .submit-btn {
+    padding: 8px 12px;
+    font-size: 12px;
   }
 }
